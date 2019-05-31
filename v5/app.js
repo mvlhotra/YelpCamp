@@ -10,14 +10,7 @@ seedDB();
 mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true });
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Campground.create({ name: 'Mtn Goat Rest', image: "https://farm2.staticflickr.com/1363/1342367857_2fd12531e7.jpg", description: "Quinoa put a bird on it shoreditch chartreuse synth etsy banjo normcore kombucha pug bitters pop-up. Migas snackwave messenger bag selvage locavore kickstarter austin street art umami hella thundercats meggings pabst air plant. Gochujang hell of semiotics, 90's irony put a bird on it plaid flexitarian. Man braid pok pok tofu chillwave butcher poke squid." }, function (err, campground) {
-//   if (err) {
-//     throw err;
-//   }
-//   console.log('added ', campground);
-// });
-
+app.use(express.static(__dirname + "/public"));
 
 app.get('/', function (req, res) {
   res.render("landing");
@@ -49,7 +42,6 @@ app.get("/campgrounds/new", function (req, res) {
   res.render('campgrounds/new');
 });
 
-
 app.get("/campgrounds/:id", function (req, res) {
   Campground.findById(req.params.id).populate("comments").exec(function (err, foundCampground) {
     if (err) {
@@ -59,7 +51,6 @@ app.get("/campgrounds/:id", function (req, res) {
   });
 });
 
-
 app.get("/campgrounds/:id/comments/new", function (req, res) {
   Campground.findById(req.params.id, function (err, campground) {
     if (err) {
@@ -67,7 +58,6 @@ app.get("/campgrounds/:id/comments/new", function (req, res) {
     }
     res.render('comments/new', { campground: campground });
   });
-
 });
 
 app.post('/campgrounds/:id/comments', function (req, res) {
@@ -85,7 +75,6 @@ app.post('/campgrounds/:id/comments', function (req, res) {
       res.redirect("/campgrounds/" + campground._id);
     });
   })
-
 });
 
 app.listen(process.env.PORT || 8080, () => {
